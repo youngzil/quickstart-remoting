@@ -1,0 +1,20 @@
+	@Override
+	public byte[] downloadFile(String fileName) {
+		String filePath = System.getProperty("user.dir") + "/temp/" + fileName;
+		InputStream data = null;
+		try {
+			data = new FileInputStream(filePath);
+			int size = data.available();
+			byte[] buffer = new byte[size];
+			IOUtils.read(data, buffer);
+			return buffer;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			IOUtils.closeQuietly(data);
+		}
+	}
