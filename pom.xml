@@ -24,12 +24,12 @@
 	</dependencies>
 
 	<modules>
-		<module>quickstart-remoting-grizzly</module>
-		<module>quickstart-remoting-netty</module>
-		<module>quickstart-remoting-mina</module>
-		<module>quickstart-remoting-xsocket</module>
-		<module>quickstart-remoting-hessian</module>
-		<module>quickstart-remoting-t-io</module>
+		<module>quickstart-grizzly</module>
+		<module>quickstart-netty</module>
+		<module>quickstart-mina</module>
+		<module>quickstart-xsocket</module>
+		<module>quickstart-hessian</module>
+		<module>quickstart-t-io</module>
 	</modules>
 
 </project>
