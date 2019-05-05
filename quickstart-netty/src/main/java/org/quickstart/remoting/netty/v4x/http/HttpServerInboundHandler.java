@@ -30,7 +30,7 @@ import io.netty.handler.codec.http.HttpRequest;
 /**
  * HttpServerInboundHandler
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年1月17日 上午9:25:00
  * @version 1.0
  */

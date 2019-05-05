@@ -13,7 +13,7 @@ import com.caucho.hessian.client.HessianProxyFactory;
 /**
  * ClientTest
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2018年5月27日 上午9:36:47
  * @since 1.0
  */

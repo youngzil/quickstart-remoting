@@ -28,7 +28,7 @@ import org.jboss.netty.handler.codec.string.StringEncoder;
 /**
  * NettyServer
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年1月16日 下午3:46:47
  * @version 1.0
  */

@@ -16,7 +16,7 @@ import org.tio.websocket.server.WsServerStarter;
 /**
  * ShowcaseWebsocketStarter 
  *  
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2018年5月13日 下午8:45:52 
  * @since 1.0
  */

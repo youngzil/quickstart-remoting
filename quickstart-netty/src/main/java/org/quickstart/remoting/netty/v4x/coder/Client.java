@@ -29,7 +29,7 @@ import io.netty.handler.codec.http.HttpVersion;
 /**
  * Client
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年1月17日 下午2:21:33
  * @version 1.0
  */

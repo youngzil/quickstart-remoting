@@ -21,7 +21,7 @@ import org.xsocket.connection.Server;
  * 
  * 采用XSocket通讯的服务端
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2018年4月22日 下午10:16:49
  * @since 1.0
  */

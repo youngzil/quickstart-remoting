@@ -28,7 +28,7 @@ import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 /**
  * HelloWorldClient
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年1月17日 下午11:18:08
  * @version 1.0
  */

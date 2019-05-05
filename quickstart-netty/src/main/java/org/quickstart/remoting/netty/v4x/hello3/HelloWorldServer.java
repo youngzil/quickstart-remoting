@@ -30,7 +30,7 @@ import io.netty.handler.ssl.util.SelfSignedCertificate;
 /**
  * HelloWorldServer
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年1月17日 下午11:17:03
  * @version 1.0
  */

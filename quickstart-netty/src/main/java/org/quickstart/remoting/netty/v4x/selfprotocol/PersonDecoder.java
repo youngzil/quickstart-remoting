@@ -19,7 +19,7 @@ import io.netty.handler.codec.ByteToMessageDecoder;
 /**
  * PersonDecoder
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年1月17日 下午2:55:55
  * @version 1.0
  */

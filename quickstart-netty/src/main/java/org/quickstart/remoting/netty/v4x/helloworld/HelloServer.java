@@ -18,7 +18,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 /**
  * HelloServer
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年1月13日 下午3:17:52
  * @version 1.0
  */

@@ -11,7 +11,7 @@ package org.quickstart.t.io.sample;
 /**
  * Const 
  *  
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2018年5月13日 下午8:45:31 
  * @since 1.0
  */

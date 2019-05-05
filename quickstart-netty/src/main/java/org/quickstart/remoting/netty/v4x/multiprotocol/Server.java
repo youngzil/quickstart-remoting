@@ -20,7 +20,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 /**
  * Server
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年1月17日 下午3:22:06
  * @version 1.0
  */

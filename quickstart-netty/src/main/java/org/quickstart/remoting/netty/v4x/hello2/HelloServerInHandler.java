@@ -18,7 +18,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 /**
  * HelloServerInHandler
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年1月17日 上午9:54:02
  * @version 1.0
  */

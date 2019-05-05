@@ -23,7 +23,7 @@ import org.xsocket.connection.INonBlockingConnection;
  * 
  * 客户端定义数据的处理类
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2018年4月22日 下午10:19:09
  * @since 1.0
  */

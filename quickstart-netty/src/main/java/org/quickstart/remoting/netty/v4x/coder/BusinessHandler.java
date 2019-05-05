@@ -17,7 +17,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 /**
  * BusinessHandler
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年1月17日 下午2:18:01
  * @version 1.0
  */

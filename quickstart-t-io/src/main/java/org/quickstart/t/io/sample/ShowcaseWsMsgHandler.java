@@ -24,7 +24,7 @@ import org.tio.websocket.server.handler.IWsMsgHandler;
 /**
  * ShowcaseWsMsgHandler 
  *  
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2018年5月13日 下午8:42:15 
  * @since 1.0
  */

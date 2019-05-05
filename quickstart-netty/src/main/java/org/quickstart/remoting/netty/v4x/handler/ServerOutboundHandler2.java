@@ -18,7 +18,7 @@ import io.netty.channel.ChannelPromise;
 /**
  * ServerOutboundHandler2
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年1月17日 上午10:13:28
  * @version 1.0
  */

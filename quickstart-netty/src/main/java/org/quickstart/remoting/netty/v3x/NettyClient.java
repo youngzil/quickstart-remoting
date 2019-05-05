@@ -29,7 +29,7 @@ import org.jboss.netty.handler.codec.string.StringEncoder;
 /**
  * NettyClient
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年1月16日 下午3:50:05
  * @version 1.0
  */

@@ -17,7 +17,7 @@ import io.netty.handler.codec.MessageToByteEncoder;
 /**
  * StringEncoder
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年1月17日 下午3:30:51
  * @version 1.0
  */

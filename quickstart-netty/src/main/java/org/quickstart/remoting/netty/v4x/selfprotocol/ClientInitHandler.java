@@ -17,7 +17,7 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 /**
  * ClientInitHandler
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年1月17日 下午2:58:03
  * @version 1.0
  */

@@ -22,7 +22,7 @@ import io.netty.handler.codec.http.HttpResponseEncoder;
 /**
  * HttpServer
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2017年1月17日 上午9:22:51
  * @version 1.0
  */

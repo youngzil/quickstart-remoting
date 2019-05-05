@@ -22,7 +22,7 @@ import org.xsocket.connection.NonBlockingConnection;
  * 
  * 非阻塞的客户端是能够支持事件处理的方法的。即如果从网络通道中没有取到想要的数据就会自动退出程序
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2018年4月22日 下午10:19:48
  * @since 1.0
  */

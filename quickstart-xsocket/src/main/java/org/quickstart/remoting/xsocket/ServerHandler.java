@@ -25,7 +25,7 @@ import org.xsocket.connection.INonBlockingConnection;
  * 
  * 服务端定义数据的处理类
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2018年4月22日 下午10:16:01
  * @since 1.0
  */

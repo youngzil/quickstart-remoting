@@ -13,7 +13,7 @@ import org.tio.utils.time.Time;
 /**
  * ShowcaseServerConfig 
  *  
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2018年5月13日 下午8:44:54 
  * @since 1.0
  */

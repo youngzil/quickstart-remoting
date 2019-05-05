@@ -1,6 +1,4 @@
 http://netty.io/
-
-
 https://github.com/netty/netty
 
 
@@ -17,6 +15,9 @@ http://ifeve.com/netty1/
 https://www.cnblogs.com/claireyuancy/p/7343901.html
 https://blog.csdn.net/gaowenhui2008/article/details/55044704
 
+
+netty3.0：org.jboss.netty
+netty4.0：io.netty
 
 
 

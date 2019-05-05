@@ -21,7 +21,7 @@ import com.caucho.hessian.server.HessianServlet;
 /**
  * UserHessianServlet
  * 
- * @author：yangzl@asiainfo.com
+ * @author：youngzil@163.com
  * @2018年5月27日 上午9:36:03
  * @since 1.0
  */
