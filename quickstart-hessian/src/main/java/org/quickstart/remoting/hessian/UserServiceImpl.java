@@ -3,7 +3,7 @@
  * 文件名：UserServiceImpl.java
  * 版本信息：
  * 日期：2018年5月27日
- * Copyright asiainfo Corporation 2018
+ * Copyright youngzil Corporation 2018
  * 版权所有 *
  */
 package org.quickstart.remoting.hessian;

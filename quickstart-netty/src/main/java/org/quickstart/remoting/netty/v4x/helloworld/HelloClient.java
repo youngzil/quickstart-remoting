@@ -1,5 +1,5 @@
 /**
- * 项目名称：quickstart-netty 文件名：HelloClient.java 版本信息： 日期：2017年1月13日 Copyright asiainfo Corporation
+ * 项目名称：quickstart-netty 文件名：HelloClient.java 版本信息： 日期：2017年1月13日 Copyright youngzil Corporation
  * 2017 版权所有 *
  */
 package org.quickstart.remoting.netty.v4x.helloworld;
