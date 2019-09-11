@@ -1,19 +1,18 @@
 /**
- * 项目名称：quickstart-netty 文件名：HelloClient.java 版本信息： 日期：2017年1月13日 Copyright youngzil Corporation
- * 2017 版权所有 *
+ * 项目名称：quickstart-netty 文件名：HelloClient.java 版本信息： 日期：2017年1月13日 Copyright youngzil Corporation 2017 版权所有 *
  */
 package org.quickstart.remoting.netty.v4x.helloworld;
 
-import io.netty.channel.ChannelOption;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 /**
  * HelloClient
@@ -42,6 +41,11 @@ public class HelloClient {
 
       // 连接服务端
       Channel ch = b.connect(host, port).sync().channel();
+      // ch.closeFuture().sync();
+
+      // Start the client.
+      // ChannelFuture f = b.connect(host, port).sync();
+      // f.channel().closeFuture().sync();
 
       // 控制台输入
       BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -50,6 +54,7 @@ public class HelloClient {
         if (line == null) {
           continue;
         }
+
         /*
          * 向服务端发送在控制台输入的文本 并用"\r\n"结尾 之所以用\r\n结尾 是因为我们在handler中添加了
          * DelimiterBasedFrameDecoder 帧解码。

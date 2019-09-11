@@ -43,6 +43,7 @@ http://ifeve.com/netty1/
 https://blog.csdn.net/xiaolang85/article/details/37873059
 https://blog.csdn.net/hbtj_1216/article/details/75331995
 https://blog.csdn.net/gaowenhui2008/article/details/55044704
+https://blog.csdn.net/a724888/article/category/7744972
 
 
 netty3.0：org.jboss.netty
@@ -399,19 +400,36 @@ Netty 的 Zero-copy 体现在如下几个个方面:合并、分解、包装、tr
 
 
 ---------------------------------------------------------------------------------------------------------------------
+https://www.jianshu.com/p/7882689e7fe5
+https://www.jianshu.com/p/c4bd37a3555b
+https://blog.csdn.net/pentiumchen/article/details/45372625
+https://blog.csdn.net/TheLudlows/article/details/86144788
+http://blog.jobbole.com/106344/
+http://www.importnew.com/22205.html
+https://blog.csdn.net/chengzhang1989/article/details/80424556
 Netty内存管理：堆外内存池
 
 
 
 通过堆外内存的方式，避免了频繁的GC，但是带来了另外一个问题堆外内存创建的效率十分的低，所以频繁创建堆外内存更加糟糕。基于上述原因，Netty最终设计了一个堆外内存池，申请了一大块内存空间，然后对这块内存空间提供管理接口，让应用层不需要关注内存操作，能够直接拿到相关数据。
 
+heap模式存在频繁的GC，direct模式如果频繁开辟缓存和销毁，性能更低，所以采取了Pool的方式管理direct。
+而实际上使用池的技术也需要标记已使用的，和未使用的区域，使用完成之后也需要进行释放。
+Netty采取了一种GC策略，引用计数法。有一个类引用了该Buffer，+1，release的时候-1。为0的时候就都不使用了，这个时候该区域就可以进行释放
+
+
+通过NIO传输数据时需要一个内存地址，并且在数据传输过程中这个地址不可发生变化。但是，GC为了减少内存碎片会压缩内存，也就是说对象的实际内存地址会发生变化，所以Java就引入了不受GC控制的堆外内存来进行IO操作。那么数据传输就变成了这样
+但是内存拷贝对性能有可能影响比较大，所以Java中可以绕开堆内存直接操作堆外内存，问题是创建堆外内存的速度比堆内存慢了10到20倍，为了解决这个问题Netty就做了内存池。
 
 
 
 
-
-
-
+内存池实现：
+1、内存的分配：
+  1、内存池采用了slab分配思路，内存被划分成多种不同大小的内存单元，在分配内存时根据使用者请求的内存大小进行计算，匹配最接近的内存单元。分为tiny、small、normall、Huge内存块
+  2、为了避免线程竞争，内存分配优先在线程内分配，在PoolThreadCache中定义了tinySubPageHeapCaches、smallSubPageHeapCaches、normalHeapCaches分别在线程内缓存tiny、small、normall内存块
+2、内存的回收
+3、内存的整理
 
 
 

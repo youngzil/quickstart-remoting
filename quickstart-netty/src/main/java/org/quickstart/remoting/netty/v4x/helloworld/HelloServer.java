@@ -1,6 +1,5 @@
 /**
- * 项目名称：quickstart-netty 文件名：HelloServer.java 版本信息： 日期：2017年1月13日 Copyright youngzil Corporation
- * 2017 版权所有 *
+ * 项目名称：quickstart-netty 文件名：HelloServer.java 版本信息： 日期：2017年1月13日 Copyright youngzil Corporation 2017 版权所有 *
  */
 package org.quickstart.remoting.netty.v4x.helloworld;
 
@@ -32,9 +31,11 @@ public class HelloServer {
       ServerBootstrap b = new ServerBootstrap();
       b.group(bossGroup, workerGroup)//
           .channel(NioServerSocketChannel.class)//
+          .childHandler(new HelloServerInitializer())
           .option(ChannelOption.SO_KEEPALIVE, true)// 设置Channel选项配置：
           // b.childAttr(childKey, value);//设置子Channel的属性。当值为null是，属性将被删除。
-          .childHandler(new HelloServerInitializer());
+          .childOption(ChannelOption.SO_KEEPALIVE, true);
+      ;
 
       // 服务器绑定端口监听
       ChannelFuture f = b.bind(portNumber).sync();
@@ -43,6 +44,7 @@ public class HelloServer {
 
       // 可以简写为
       /* b.bind(portNumber).sync().channel().closeFuture().sync(); */
+
     } finally {
       bossGroup.shutdownGracefully();
       workerGroup.shutdownGracefully();

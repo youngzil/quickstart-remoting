@@ -20,12 +20,12 @@ import io.netty.channel.SimpleChannelInboundHandler;
  * @2017年1月13日 下午3:24:42
  * @version 1.0
  */
-public class HelloServerHandler extends SimpleChannelInboundHandler<String> {
+public class HelloServerInboundHandler4 extends SimpleChannelInboundHandler<String> {
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, String msg) throws Exception {
         // 收到消息直接打印输出
-        System.out.println(ctx.channel().remoteAddress() + " Say : " + msg);
+        System.out.println( "HelloServerHandler channelRead0 " + ctx.channel().remoteAddress() + " Say : " + msg);
 
         // 返回客户端消息 - 我已经接收到了你的消息
         // 注意:在3.x版本中此处有很大区别。在3.x版本中write()方法是自动flush的。在4.x版本的前面几个版本也是一样的。但是在4.0.9之后修改为WriteAndFlush。普通的write方法将不会发送消息。需要手动在write之后flush()一次
@@ -41,7 +41,7 @@ public class HelloServerHandler extends SimpleChannelInboundHandler<String> {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
 
-        System.out.println("RamoteAddress : " + ctx.channel().remoteAddress() + " active !");
+        System.out.println("HelloServerHandler channelActive RamoteAddress : " + ctx.channel().remoteAddress() + " active !");
 
         ctx.writeAndFlush("Welcome to " + InetAddress.getLocalHost().getHostName() + " service!\n");
 
