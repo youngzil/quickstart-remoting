@@ -10,6 +10,7 @@ import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 import io.netty.handler.codec.Delimiters;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
+import io.netty.handler.logging.LoggingHandler;
 
 /**
  * HelloServerInitializer
@@ -31,15 +32,21 @@ public class HelloServerInitializer extends ChannelInitializer<SocketChannel> {
     pipeline.addLast("decoder", new StringDecoder());
     pipeline.addLast("encoder", new StringEncoder());
 
-    // 注册两个OutboundHandler，执行顺序为注册顺序的逆序，所以应该是OutboundHandler2 OutboundHandler1
-    ch.pipeline().addLast(new OutboundHandler1());
-    ch.pipeline().addLast(new OutboundHandler2());
     // 注册两个InboundHandler，执行顺序为注册顺序，所以应该是InboundHandler1 InboundHandler2
-    ch.pipeline().addLast(new HelloServerInboundHandler1());
-    ch.pipeline().addLast(new HelloServerInboundHandler2());
+    pipeline.addLast("in1", new HelloServerInboundHandler1());//入站
+    pipeline.addLast("in2", new HelloServerInboundHandler2());//入站
+    // 自己的逻辑InboundHandler
 
-    // 自己的逻辑Handler
-    pipeline.addLast("handler", new HelloServerInboundHandler4());
+    // 注册两个OutboundHandler，执行顺序为注册顺序的逆序，所以应该是OutboundHandler2 OutboundHandler1
+    pipeline.addLast("Duplex1", new LoggingHandler());//入站 和 出站
+    pipeline.addLast("Duplex2", new LastChannelDuplexHandler());//入站 和 出站
+
+    pipeline.addLast("out1", new OutboundHandler1());//出站
+    pipeline.addLast("out2", new OutboundHandler2());//出站
+
+    pipeline.addLast("in4", new HelloServerInboundHandler4());//入站
+
+    // 最后一个必须是ChannelInboundHandler,如果是ChannelDuplexHandler类型的，只会执行入站逻辑channelRead，不会执行出站逻辑write
 
   }
 

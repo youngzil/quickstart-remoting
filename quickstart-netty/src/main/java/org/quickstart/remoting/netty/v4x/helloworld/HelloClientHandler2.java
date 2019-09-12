@@ -1,6 +1,5 @@
 package org.quickstart.remoting.netty.v4x.helloworld;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import org.slf4j.Logger;

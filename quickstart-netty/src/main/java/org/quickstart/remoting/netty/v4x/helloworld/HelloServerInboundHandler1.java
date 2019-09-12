@@ -22,10 +22,10 @@ public class HelloServerInboundHandler1 extends ChannelInboundHandlerAdapter {
     System.out.println("InboundHandler1 channelRead receive" + ctx.channel().remoteAddress() + " Say : " + msg);
 
     // 通知执行下一个InboundHandler
-    // ctx.fireChannelRead(msg);
+    ctx.fireChannelRead(msg);
 
     // 不往后传递，直接返回数据，不影响OutboundHandler的执行
-    ctx.writeAndFlush("HelloServerInboundHandler1 channelRead  send" + msg + "\n");
+    // ctx.writeAndFlush("HelloServerInboundHandler1 channelRead  send" + msg + "\n");
   }
 
   @Override

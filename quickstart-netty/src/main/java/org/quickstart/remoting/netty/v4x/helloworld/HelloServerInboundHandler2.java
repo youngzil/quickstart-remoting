@@ -25,7 +25,7 @@ public class HelloServerInboundHandler2 extends ChannelInboundHandlerAdapter {
     System.out.println("Client said:" + resultStr);
     result.release();*/
 
-    System.out.println( "InboundHandler2 channelRead receive" + ctx.channel().remoteAddress() + " Say : " + msg);
+    System.out.println("InboundHandler2 channelRead receive" + ctx.channel().remoteAddress() + " Say : " + msg);
 
     // 通知执行下一个InboundHandler
     ctx.fireChannelRead(msg);
