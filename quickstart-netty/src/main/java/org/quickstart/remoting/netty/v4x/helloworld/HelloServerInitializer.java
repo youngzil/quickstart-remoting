@@ -47,6 +47,8 @@ public class HelloServerInitializer extends ChannelInitializer<SocketChannel> {
     pipeline.addLast("in4", new HelloServerInboundHandler4());//入站
 
     // 最后一个必须是ChannelInboundHandler,如果是ChannelDuplexHandler类型的，只会执行入站逻辑channelRead，不会执行出站逻辑write
+    // 如果中间一个InboundHandler直接返回，不往后传递，只有这个hander之前的outhander才会执行,如果最后一个是DuplexHandler，里面的write逻辑也不会执行
+
 
   }
 
