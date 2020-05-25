@@ -9,10 +9,11 @@ java nio的selector  和linux的epoll select
   
 Java异步NIO框架Netty实现高性能高并发：  
 netty高性能  
-传输：异步非阻塞通信、零拷贝（直接内存和transferTo）、灵活的TCP参数配置能力（option参数的设置）  
-协议：多种序列化协议，Protobuf的支持、Thrift的  
 线程：高效的Reactor线程模型、线程池、无锁化的串行设计理念：Netty的NioEventLoop是单线程的  
 内存：内存池化，各种不同大小对象管理：三种大小对象类型  
+传输：异步非阻塞通信、零拷贝（直接内存和transferTo）、灵活的TCP参数配置能力（option参数的设置）  
+协议：多种序列化协议，Protobuf的支持、Thrift的  
+
   
   
 Netty实现原理  
@@ -24,6 +25,7 @@ netty的相关，管道是什么设计模式：责任链模式 或者 管道设�
   
 Netty零拷贝  
 Netty内存管理：堆外内存池  
+
   
 使用Handler的注意事项  
   
@@ -159,6 +161,12 @@ netty线程模型和JDK线程池模型比较：
     MEG中由于队列是只有一个线程消费，BlockingQueue锁碰撞机会比TPE小很多，线程切换开销也比TPE小很多  
 2、netty保证执行顺序：TPE任务执行没有顺序，取出任务交给线程执行，MEG中由于队列是只有一个线程消费，可以保证执行顺序和入队顺序一致，  
   如: 在Channel上先后触发了connect, read, close事件，如果业务上要求收到close事件后不再处理read事件, 如果执行先后顺序不能保证，很有可能执行不到read的业务。这种类似业务场景在基于TCP协议的服务器中很常见，这一点TPE不能支持，而MEG能够很好地支持这些对任务执行顺序有要求的场景。  
+
+
+Reactor 多线程模型的特点：
+1）有专门一个 NIO 线程 -Acceptor 线程用于监听服务端，接收客户端的 TCP 连接请求；
+2）网络 IO 操作 - 读、写等由一个 NIO 线程池负责，线程池可以采用标准的 JDK 线程池实现，它包含一个任务队列和 N 个可用的线程，由这些 NIO 线程负责消息的读取、解码、编码和发送；
+3）1 个 NIO 线程可以同时处理 N 条链路，但是 1 个链路只对应 1 个 NIO 线程，防止发生并发操作问题。
   
 ---------------------------------------------------------------------------------------------------------------------  
   
@@ -430,8 +438,17 @@ Netty零拷贝：
   
 OS层面零拷贝  
 netty层面零拷贝  
-  
-  
+
+Netty的零拷贝体现在三个方面：
+
+1. Netty的接收和发送ByteBuffer采用DIRECT BUFFERS，使用堆外直接内存进行Socket读写，不需要进行字节缓冲区的二次拷贝。如果使用传统的堆内存（HEAP BUFFERS）进行Socket读写，JVM会将堆内存Buffer拷贝一份到直接内存中，然后才写入Socket中。相比于堆外直接内存，消息在发送过程中多了一次缓冲区的内存拷贝。
+
+2. Netty提供了组合Buffer对象，可以聚合多个ByteBuffer对象，用户可以像操作一个Buffer那样方便的对组合Buffer进行操作，避免了传统通过内存拷贝的方式将几个小Buffer合并成一个大的Buffer。
+
+3. Netty的文件传输采用了transferTo方法，它可以直接将文件缓冲区的数据发送到目标Channel，避免了传统通过循环write方式导致的内存拷贝问题。
+
+
+
   
 即所谓的 Zero-copy, 就是在操作数据时, 不需要将数据 buffer 从一个内存区域拷贝到另一个内存区域. 因为少了一次内存的拷贝, 因此 CPU 的效率就得到的提升.  
   
@@ -446,11 +463,16 @@ Netty 的 Zero-copy 体现在如下几个个方面:合并、分解、包装、tr
 2、通过 wrap 操作, 我们可以将 byte[] 数组、ByteBuf、ByteBuffer等包装成一个 Netty ByteBuf 对象, 进而避免了拷贝操作.  
 3、ByteBuf 支持 slice 操作, 因此可以将 ByteBuf 分解为多个共享同一个存储区域的 ByteBuf, 避免了内存的拷贝.  
 4、通过 FileRegion 包装的FileChannel.tranferTo 实现文件传输, 可以直接将文件缓冲区的数据发送到目标 Channel, 避免了传统通过循环 write 方式导致的内存拷贝问题.  
-  
-  
-  
-  
-  
+
+
+
+参考
+https://segmentfault.com/a/1190000007560884
+
+
+
+
+
 ---------------------------------------------------------------------------------------------------------------------  
 https://www.jianshu.com/p/7882689e7fe5  
 https://www.jianshu.com/p/c4bd37a3555b  
@@ -482,7 +504,7 @@ Netty采取了一种GC策略，引用计数法。有一个类引用了该Buffer�
   1、内存池采用了slab分配思路，内存被划分成多种不同大小的内存单元，在分配内存时根据使用者请求的内存大小进行计算，匹配最接近的内存单元。分为tiny、small、normall、Huge内存块  
   2、为了避免线程竞争，内存分配优先在线程内分配，在PoolThreadCache中定义了tinySubPageHeapCaches、smallSubPageHeapCaches、normalHeapCaches分别在线程内缓存tiny、small、normall内存块  
 2、内存的回收  
-3、内存的整理  
+3、内存的碎片整理  
   
   
 池化的简单实现思路，是基于JVM堆内存之上，构建更高一层内存池，通过调用内存池allocate方法获取内存空间，调用release方法将内存区域归还内存池。  
@@ -677,6 +699,7 @@ ChannelHandlerContext.deregister(ChannelPromise)：取消注册channel事件
 参考  
 https://sylvanassun.github.io/2017/11/30/2017-11-30-netty_introduction/  
 https://my.oschina.net/7001/blog/994219  
+https://www.infoq.cn/article/netty-threading-model  
   
 ---------------------------------------------------------------------------------------------------------------------  
   
@@ -713,9 +736,3 @@ Netty的解决办法：对Selector的select操作周期进行统计，每完成�
 ---------------------------------------------------------------------------------------------------------------------  
   
   
-  
-  
-  
-  
-  
----------------------------------------------------------------------------------------------------------------------
