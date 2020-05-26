@@ -44,39 +44,40 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
+      <version>1.2.3</version>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-access</artifactId>
+      <version>1.2.3</version>
 		</dependency>
 
 		<!-- redirect apache commons logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
+      <version>1.7.30</version>
 		</dependency>
 		<!-- redirect jdk util logging -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jul-to-slf4j</artifactId>
+      <version>1.7.30</version>
 		</dependency>
 		<!-- redirect log4j -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>log4j-over-slf4j</artifactId>
+      <version>1.7.30</version>
 		</dependency>
 
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<scope>test</scope>
-		</dependency>
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <version>7.1.0</version>
+      <scope>test</scope>
+    </dependency>
 
-	</dependencies>
+  </dependencies>
 
 </project>

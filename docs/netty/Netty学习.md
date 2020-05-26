@@ -197,9 +197,9 @@ Channel的Unsafe实例的方法必须要在EventLoop中执行(netty中明确指�
 netty线程模型和JDK线程池模型比较：  
   
 为了方便描述，先定义几个简称  
-ThreadPoolExecuto: TPE  
-MultithreadEventExecutorGroup: MEG  
-SingleThreadEventExecutor: STE  
+ThreadPoolExecutor: TPE(JDK)
+MultithreadEventExecutorGroup: MEG(Netty)
+SingleThreadEventExecutor: STE(Netty)
   
 接下来，对比一下TPE和MEG  
   
@@ -302,9 +302,9 @@ TCP粘包/拆包与Netty解决方案
 Netty半包解码器解决TCP粘包/拆包问题  
 为了解决TCP粘包/拆包导致的半包读写问题，Netty默认提供了多种编解码器用于处理半包，使其解决TCP粘包问题变得非常容易，主要有：  
   
-LineBasedFrameDecoder  回车换行解码器  
-DelimiterBasedFrameDecoder（添加特殊分隔符报文来分包，用户可以指定消息结束的分隔符，回车换行解码器实际上是一种特殊的  
 FixedLengthFrameDecoder（使用定长的报文来分包）  
+DelimiterBasedFrameDecoder（添加特殊分隔符报文来分包，用户可以指定消息结束的分隔符，回车换行解码器实际上是一种特殊的  
+LineBasedFrameDecoder  回车换行解码器  
 LengthFieldBasedFrameDecoder  大多数的协议（私有或者公有），协议头中会携带长度字段，用于标识消息体或者整包消息的长度，例如SMPP、HTTP协议等。  
 由于基于长度解码需求的通用性，以及为了降低用户的协议开发难度，Netty提供了LengthFieldBasedFrameDecoder，自动屏蔽TCP底层的拆包和粘包问题，只需要传入正确的参数，即可轻松解决“读半包“问题。  
   
@@ -629,7 +629,7 @@ ChannelInitializer：用于在ChannelPipeline中安装一组自定义的ChannelH
   
 出站、入站、出入站混合：  
 ChannelInboundHandlerAdapter：处理入站事件，实现了ChannelInboundHandler中定义的所有方法，只负责传播事件，通过委托ChannelHandlerContext来完成；  
-需注意ChannelInboundHandlerAdapter的ChannelRead方法处理完消息后不会自动释放消息，若需要自动释放消息可以使用SimpleChannelInboundHandler。  
+需注意ChannelInboundHandlerAdapter的ChannelRea方法处理完消息后不会自动释放消息，若需要自动释放消息可以使用SimpleChannelInboundHandler。  
   
 ChannelOutboundHandlerAdapter：处理出站事件，实现了ChannelOutboundHandler中定义的所有方法，只负责传播事件，通过委托ChannelHandlerContext来完成。  
   

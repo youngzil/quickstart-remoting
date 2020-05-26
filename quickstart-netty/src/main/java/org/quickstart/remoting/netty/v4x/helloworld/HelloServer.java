@@ -35,7 +35,6 @@ public class HelloServer {
           .option(ChannelOption.SO_KEEPALIVE, true)// 设置Channel选项配置：
           // b.childAttr(childKey, value);//设置子Channel的属性。当值为null是，属性将被删除。
           .childOption(ChannelOption.SO_KEEPALIVE, true);
-      ;
 
       // 服务器绑定端口监听
       ChannelFuture f = b.bind(portNumber).sync();

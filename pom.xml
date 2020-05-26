@@ -2,26 +2,46 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<parent>
+	<!--<parent>
 		<groupId>org.quickstart</groupId>
 		<artifactId>quickstart-all</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>..</relativePath> <!-- lookup parent from repository -->
-	</parent>
+		<relativePath>..</relativePath> &lt;!&ndash; lookup parent from repository &ndash;&gt;
+	</parent>-->
 
 	<modelVersion>4.0.0</modelVersion>
+  <groupId>org.quickstart</groupId>
 	<artifactId>quickstart-remoting</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>${project.artifactId}-${project.version}</name>
 	<url>http://maven.apache.org</url>
-	<description>Demo project for Spring Boot Admin</description>
+	<description>Demo project for XXX</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
 	</properties>
 
-	<dependencies>
-	</dependencies>
+  <dependencies>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.12</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13</version>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
 
 	<modules>
 		<module>quickstart-grizzly</module>
@@ -32,4 +52,67 @@
 		<module>quickstart-t-io</module>
 	</modules>
 
+  <build>
+
+    <!-- 最后生成的资源文件 -->
+    <resources>
+      <!-- 所有公共资源文件 -->
+      <resource>
+        <directory>src/main/resources</directory>
+        <!-- 资源根目录排除各环境的配置，防止在生成目录中多余其它目录 -->
+        <!-- <excludes>
+           <exclude>dev/*</exclude>
+           <exclude>test/*</exclude>
+           <exclude>prod/*</exclude>
+         </excludes>-->
+      </resource>
+      <!-- 不同环境的资源文件 -->
+      <resource>
+        <directory>src/main/filters/${build.environment}</directory>
+      </resource>
+    </resources>
+
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.5.1</version>
+        <configuration>
+          <source>${maven.compiler.source}</source>
+          <target>${maven.compiler.target}</target>
+          <compilerVersion>${maven.compiler.source}</compilerVersion>
+          <encoding>${maven.compiler.encoding}</encoding>
+          <showDeprecation>true</showDeprecation>
+          <showWarnings>true</showWarnings>
+        </configuration>
+      </plugin>
+
+      <!-- 资源文件处理插件，必须配置 -->
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <configuration>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+
+    </plugins>
+  </build>
+
+  <repositories>
+
+    <repository>
+      <id>alimaven-public</id>
+      <name>aliyun maven</name>
+      <url>https://maven.aliyun.com/repository/public</url>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+        <updatePolicy>always</updatePolicy>
+        <checksumPolicy>fail</checksumPolicy>
+      </snapshots>
+    </repository>
+
+  </repositories>
 </project>
