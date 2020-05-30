@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>io.netty.buffer.ByteBufAllocator</OriginalElement>
+  <nodes>
+    <node x="0.0" y="204.0">io.netty.buffer.UnpooledByteBufAllocator</node>
+    <node x="305.0" y="0.0">io.netty.buffer.ByteBufAllocator</node>
+    <node x="402.25" y="102.0">io.netty.channel.PreferHeapByteBufAllocator</node>
+    <node x="131.25000000000003" y="102.0">io.netty.buffer.AbstractByteBufAllocator</node>
+    <node x="271.0" y="204.0">io.netty.buffer.PooledByteBufAllocator</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="io.netty.buffer.PooledByteBufAllocator" target="io.netty.buffer.AbstractByteBufAllocator">
+      <point x="0.0" y="-26.0" />
+      <point x="388.0" y="179.0" />
+      <point x="319.5" y="179.0" />
+      <point x="62.75" y="26.0" />
+    </edge>
+    <edge source="io.netty.channel.PreferHeapByteBufAllocator" target="io.netty.buffer.ByteBufAllocator">
+      <point x="0.0" y="-26.0" />
+      <point x="536.25" y="77.0" />
+      <point x="442.25" y="77.0" />
+      <point x="45.75" y="26.0" />
+    </edge>
+    <edge source="io.netty.buffer.UnpooledByteBufAllocator" target="io.netty.buffer.AbstractByteBufAllocator">
+      <point x="0.0" y="-26.0" />
+      <point x="125.5" y="179.0" />
+      <point x="194.00000000000003" y="179.0" />
+      <point x="-62.75" y="26.0" />
+    </edge>
+    <edge source="io.netty.buffer.AbstractByteBufAllocator" target="io.netty.buffer.ByteBufAllocator">
+      <point x="0.0" y="-26.0" />
+      <point x="256.75" y="77.0" />
+      <point x="350.75" y="77.0" />
+      <point x="-45.75" y="26.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="335.5" y="128.0" />
+  <SelectedNodes>
+    <node>io.netty.buffer.ByteBufAllocator</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

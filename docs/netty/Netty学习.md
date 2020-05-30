@@ -10,11 +10,10 @@ java nio的selector  和linux的epoll select
 Java异步NIO框架Netty实现高性能高并发：  
 netty高性能  
 线程：高效的Reactor线程模型、线程池、无锁化的串行设计理念：Netty的NioEventLoop是单线程的  
-内存：内存池化，各种不同大小对象管理：三种大小对象类型  
+内存：内存零拷贝、内存池化，各种不同大小对象管理：三种大小对象类型  
 传输：异步非阻塞通信、零拷贝（直接内存和transferTo）、灵活的TCP参数配置能力（option参数的设置）  
 协议：多种序列化协议，Protobuf的支持、Thrift的  
 
-  
   
 Netty实现原理  
 netty的相关所有，使用的协议  
@@ -30,9 +29,6 @@ Netty内存管理：堆外内存池
 使用Handler的注意事项  
   
 ---------------------------------------------------------------------------------------------------------------------  
-  
-  
-  
 http://netty.io/  
 https://github.com/netty/netty  
   
@@ -202,14 +198,21 @@ MultithreadEventExecutorGroup: MEG(Netty)
 SingleThreadEventExecutor: STE(Netty)
   
 接下来，对比一下TPE和MEG  
+1、线程管理: 
+2、任务排队:
+3、任务提交和执行: 
+
   
-线程管理: TPE负责管理线程，根据传入的参数，运行过程中动态调节线程数，它也可以让线程一直保持在一个稳定的数量。  
+1、线程管理: 
+TPE负责管理线程，根据传入的参数，运行过程中动态调节线程数，它也可以让线程一直保持在一个稳定的数量。  
 MEG不负责管理线程，它只负责创建指定数量的STE, 每个STE只维护一个线程，保证有且只有一个线程。  
   
-任务排队: TPE维护一个所有线程共用的任务队列，所有线程都从同一队列中取任务。  
+2、任务排队: 
+TPE维护一个所有线程共用的任务队列，所有线程都从同一队列中取任务。  
 MEG没任务队列，它只负责把任务派发到一个STE, 默认的派发策略是轮询。每个STE维护一个私有的任务队列，STE会把任务放入私有的队列中排队，这队列只有STE维护的线程才能消费。  
   
-任务提交和执行: TPE把任务当成无关联的独立任务执行，不保证任务的执行顺序和execute的调用顺序一致, TPE认为任务的顺序不重要。  
+3、任务提交和执行: 
+TPE把任务当成无关联的独立任务执行，不保证任务的执行顺序和execute的调用顺序一致, TPE认为任务的顺序不重要。  
 MEG提交任务的方式有两种,   
 （1）直接调用MEG的execute方法提交任务，这个方式，和TPE一样，不关心任务的执行顺序；  
 （2）先从MEG中取出一个STE，然后调用STE的excute，这种方式任务的执行顺序和execute调用顺序一致。  
@@ -350,10 +353,11 @@ https://youzhixueyuan.com/netty-implementation-principle.html
 Java异步NIO框架Netty实现高性能高并发  
   
 netty高性能  
+线程：高效的Reactor线程模型、线程池、无锁化的串行设计理念：Netty的NioEventLoop是单线程的  
+内存：内存零拷贝、内存池化，
 传输：异步非阻塞通信、零拷贝（直接内存和transferTo）、灵活的TCP参数配置能力（option参数的设置）  
 协议：多种序列化协议，Protobuf的支持、Thrift的  
-线程：高效的Reactor线程模型、线程池、无锁化的串行设计理念：Netty的NioEventLoop是单线程的  
-内存：内存池化，  
+  
   
   
   
@@ -504,6 +508,7 @@ Netty采取了一种GC策略，引用计数法。有一个类引用了该Buffer�
   1、内存池采用了slab分配思路，内存被划分成多种不同大小的内存单元，在分配内存时根据使用者请求的内存大小进行计算，匹配最接近的内存单元。分为tiny、small、normall、Huge内存块  
   2、为了避免线程竞争，内存分配优先在线程内分配，在PoolThreadCache中定义了tinySubPageHeapCaches、smallSubPageHeapCaches、normalHeapCaches分别在线程内缓存tiny、small、normall内存块  
 2、内存的回收  
+    Netty采取了一种GC策略，引用计数法。有一个类引用了该Buffer，+1，release的时候-1。为0的时候就都不使用了，这个时候该区域就可以进行释放
 3、内存的碎片整理  
   
   
@@ -612,6 +617,7 @@ EventLoopGroup负责管理和分配EventLoop（创建EventLoop和为每个新创
   
 一个Channel一生只会使用一个EventLoop（但是一个EventLoop可能会被指派用于服务多个Channel）  
 Channel:EventLoop=N:1  
+EventLoop:Selector=1:1
   
 链式调用  
   
