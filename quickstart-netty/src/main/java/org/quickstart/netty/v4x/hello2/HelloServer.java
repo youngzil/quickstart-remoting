@@ -1,10 +1,5 @@
 /**
- * 项目名称：quickstart-netty 
- * 文件名：HelloServer.java
- * 版本信息：
- * 日期：2017年1月17日
- * Copyright youngzil Corporation 2017
- * 版权所有 *
+ * 项目名称：quickstart-netty 文件名：HelloServer.java 版本信息： 日期：2017年1月17日 Copyright youngzil Corporation 2017 版权所有 *
  */
 package org.quickstart.netty.v4x.hello2;
 
@@ -19,36 +14,41 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 /**
  * HelloServer
- * 
+ *
+ * @version 1.0
  * @author：youngzil@163.com
  * @2017年1月17日 上午9:53:17
- * @version 1.0
  */
 public class HelloServer {
-    public void start(int port) throws Exception {
-        EventLoopGroup bossGroup = new NioEventLoopGroup();
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
-        try {
-            ServerBootstrap b = new ServerBootstrap();
-            b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class).childHandler(new ChannelInitializer<SocketChannel>() {
-                @Override
-                public void initChannel(SocketChannel ch) throws Exception {
-                    // 注册handler
-                    ch.pipeline().addLast(new HelloServerInHandler());
-                }
-            }).option(ChannelOption.SO_BACKLOG, 128).childOption(ChannelOption.SO_KEEPALIVE, true);
 
-            ChannelFuture f = b.bind(port).sync();
+  public void start(int port) throws Exception {
+    EventLoopGroup bossGroup = new NioEventLoopGroup();
+    EventLoopGroup workerGroup = new NioEventLoopGroup();
+    try {
+      ServerBootstrap b = new ServerBootstrap();
+      b.group(bossGroup, workerGroup)//
+          .channel(NioServerSocketChannel.class)//
+          .childHandler(new ChannelInitializer<SocketChannel>() {
+            @Override
+            public void initChannel(SocketChannel ch) throws Exception {
+              // 注册handler
+              ch.pipeline().addLast(new HelloServerInHandler());
+            }
+          })//
+          .option(ChannelOption.SO_BACKLOG, 128)//
+          .childOption(ChannelOption.SO_KEEPALIVE, true);
 
-            f.channel().closeFuture().sync();
-        } finally {
-            workerGroup.shutdownGracefully();
-            bossGroup.shutdownGracefully();
-        }
+      ChannelFuture f = b.bind(port).sync();
+
+      f.channel().closeFuture().sync();
+    } finally {
+      workerGroup.shutdownGracefully();
+      bossGroup.shutdownGracefully();
     }
+  }
 
-    public static void main(String[] args) throws Exception {
-        HelloServer server = new HelloServer();
-        server.start(8000);
-    }
+  public static void main(String[] args) throws Exception {
+    HelloServer server = new HelloServer();
+    server.start(8000);
+  }
 }

@@ -31,7 +31,7 @@ public class HelloServer {
       ServerBootstrap b = new ServerBootstrap();
       b.group(bossGroup, workerGroup)//
           .channel(NioServerSocketChannel.class)//
-          .childHandler(new HelloServerInitializer())
+          .childHandler(new HelloServerInitializer())//
           .option(ChannelOption.SO_KEEPALIVE, true)// 设置Channel选项配置：
           // b.childAttr(childKey, value);//设置子Channel的属性。当值为null是，属性将被删除。
           .childOption(ChannelOption.SO_KEEPALIVE, true);
