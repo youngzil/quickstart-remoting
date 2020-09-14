@@ -1,7 +1,33 @@
-netty概念和常用类：group、channel、handler、option  
-netty执行流程：拆包、解码、封装对象  
+- [Netty介绍](#Netty介绍)
+    - [Netty概述](#Netty概述)
+    - [Netty常用类](#Netty常用类)
+- [Netty实现原理](#Netty实现原理)
+    - [Netty执行流程](#Netty执行流程)
+    - [ChannelPipeline的设计](#ChannelPipeline的设计)
+    - [使用Handler的注意事项](#使用Handler的注意事项)
+    - [Netty高性能原因](#Netty高性能原因)
+    - [Netty线程模型](#Netty线程模型)
+        - [Netty线程模型和JDK线程池TPE模型比较](#Netty线程模型和JDK线程池TPE模型比较)
+        - [Reactor多线程模型的特点](#Reactor多线程模型的特点)
+    - [Netty内存管理](#Netty内存管理)
+        - [Netty内存管理（堆外内存池）](#Netty内存管理（堆外内存池）)
+        - [Netty零拷贝](#Netty零拷贝)
+    - [Netty传输控制](#Netty传输控制)
+        - [Java序列化和Hessian序列化的区别](#Java序列化和Hessian序列化的区别)
+        - [TCP粘包/拆包与Netty解决方案](#TCP粘包/拆包与Netty解决方案)
+        - [Netty的Selector模型](#Netty的Selector模型)
+        - [Netty及NIO的epoll空轮询bug解决方案](#Netty及NIO的epoll空轮询bug解决方案)
+    - [Netty协议](#Netty协议)
+        - [Netty的HTTP协议数据](#Netty的HTTP协议数据)
+- [参考资料](#参考资料)
+    - [Netty官网](#Netty官网)
+    - [Netty学习参考](#Netty学习参考)
+    - [SpringBoot和Netty整合](#SpringBoot和Netty整合)
+
+
+
 Server端Boss线程和worker线程比较：boss设置为1，监听端口的  
-netty两种线程模型和JDK线程池模型比较  
+Netty线程模型和JDK线程池模型比较  
 Netty的高性能及NIO的epoll空轮询bug：判定和解决：重建selector  
 TCP粘包/拆包与Netty解决方案：4种：分隔符，回车换行分隔符，定长报文，消息头和消息体  
 netty的网络创建在哪里  
@@ -15,54 +41,75 @@ netty高性能
 协议：多种序列化协议，Protobuf的支持、Thrift的  
 
   
-Netty实现原理  
+  
 netty的相关所有，使用的协议  
 hession用来干嘛的：Hessian本身即是基于Http的RPC实现  
 Java序列化和Hessian序列化的区别  
 netty的相关，管道是什么设计模式：责任链模式 或者 管道设计模式  
-  
-  
-Netty零拷贝  
-Netty内存管理：堆外内存池  
+读写空闲检测、心跳机制、WebSocket 长连接，网关里面的hander是做什么用的
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------  
+## Netty介绍
+
+### Netty概述
+
+官方的介绍：
+```
+Netty is an asynchronous event-driven network application framework for rapid development of maintainable high performance protocol servers & clients.
+```
+
+Netty是 一个异步事件驱动的网络应用程序框架，用于快速开发可维护的高性能协议服务器和客户端。
+
+
+[Netty官网](#Netty官网)
+
 
   
-使用Handler的注意事项  
   
 ---------------------------------------------------------------------------------------------------------------------  
-http://netty.io/  
-https://github.com/netty/netty  
-  
-  
-文章  
-http://ifeve.com/netty1/  
-  
-  
+
+### 为什么使用Netty
+
+
 如果没有Netty？  
 远古：java.net + java.io  
 近代：java.nio  
 其他：Mina，Grizzly  
   
   
-https://blog.csdn.net/xiaolang85/article/details/37873059  
-https://blog.csdn.net/hbtj_1216/article/details/75331995  
-https://blog.csdn.net/gaowenhui2008/article/details/55044704  
-https://blog.csdn.net/a724888/article/category/7744972  
-https://blog.csdn.net/qq_28959087/article/details/86501141  
+NIO的缺点(为什么不用NIO呢)  
+- NIO的类库和API繁杂，学习成本高，你需要熟练掌握Selector、ServerSocketChannel、SocketChannel、ByteBuffer等。
+- 需要熟悉Java多线程编程。这是因为NIO编程涉及到Reactor模式，你必须对多线程和网络编程非常熟悉，才能写出高质量的NIO程序。
+- 臭名昭著的epoll bug。它会导致Selector空轮询，最终导致CPU 100%。直到JDK1.7版本依然没得到根本性的解决。
+
+
+
+Netty的优点：相对地，Netty的优点有很多：
+- API使用简单，学习成本低。
+- 功能强大，内置了多种解码编码器，支持多种协议。
+- 性能高，对比其他主流的NIO框架，Netty的性能最优。
+- 社区活跃，发现BUG会及时修复，迭代版本周期短，不断加入新的功能。
+- Dubbo、Elasticsearch都采用了Netty，质量得到验证。  
   
   
-https://github.com/code4craft/netty-learning  
   
   
+  
+
+
+
+ 
+ 
 netty3.0：org.jboss.netty  
 netty4.0：io.netty  
   
   
-示例查看  
-org.quickstart.remoting.netty.v4x.helloworld  
-Rocketmq中的连接:NettyRemotingClient、NettyRemotingServer  
+ 
   
-  
-  
+### Netty常用类
 group、channel、handler、option  
   
 客户端：  
@@ -113,7 +160,9 @@ ChannelOption.SO_SNDBUF和ChannelOption.SO_RCVBUF
   
   
   
-netty执行流程：  
+### Netty执行流程：  
+
+拆包、解码、封装对象
   
 ChannelInitializer中的每个SocketChannel都有一个管道pipeline，保存我们之前注册的handler，组成一个链表，ChannelHandlerContext包装hander类  
 当有请求到来就执行链表的ChannelHandlerContext（内有我们定义的hander类）  
@@ -152,17 +201,23 @@ Boss一直对外宣传自己公司提供的业务，并且接受(accept)有需�
 如果公司业务繁忙，一个worker可能会为多个客户进行服务。这就是Netty里面Boss和worker之间的关系。，  
   
   
-netty线程模型和JDK线程池TPE模型比较：  
+### Netty线程模型和JDK线程池TPE模型比较：  
 1、netty线程切换几率小，更高效：TPE使用共用的队列排队，在高并发环境下会导致BlockingQueue频繁的锁碰撞，进而导致大量线程切换开销，  
     MEG中由于队列是只有一个线程消费，BlockingQueue锁碰撞机会比TPE小很多，线程切换开销也比TPE小很多  
 2、netty保证执行顺序：TPE任务执行没有顺序，取出任务交给线程执行，MEG中由于队列是只有一个线程消费，可以保证执行顺序和入队顺序一致，  
   如: 在Channel上先后触发了connect, read, close事件，如果业务上要求收到close事件后不再处理read事件, 如果执行先后顺序不能保证，很有可能执行不到read的业务。这种类似业务场景在基于TCP协议的服务器中很常见，这一点TPE不能支持，而MEG能够很好地支持这些对任务执行顺序有要求的场景。  
 
 
-Reactor 多线程模型的特点：
+### Reactor多线程模型的特点：
 1）有专门一个 NIO 线程 -Acceptor 线程用于监听服务端，接收客户端的 TCP 连接请求；
 2）网络 IO 操作 - 读、写等由一个 NIO 线程池负责，线程池可以采用标准的 JDK 线程池实现，它包含一个任务队列和 N 个可用的线程，由这些 NIO 线程负责消息的读取、解码、编码和发送；
 3）1 个 NIO 线程可以同时处理 N 条链路，但是 1 个链路只对应 1 个 NIO 线程，防止发生并发操作问题。
+
+
+Netty系列之Netty线程模型
+https://blog.csdn.net/xiaolang85/article/details/37873059  
+https://blog.csdn.net/qq_28959087/article/details/86501141 
+
   
 ---------------------------------------------------------------------------------------------------------------------  
   
@@ -267,7 +322,7 @@ https://blog.csdn.net/zhangjunli/article/details/89382006
   
   
   
-Netty的高性能及NIO的epoll空轮询bug  
+Netty及NIO的epoll空轮询bug解决方案  
   
   
 Selector BUG出现的原因  
@@ -284,8 +339,18 @@ Netty的解决策略：
 在某个周期内如果连续N次空轮询，则说明触发了JDK NIO的epoll死循环bug。  
 创建新的Selector，将出现bug的Selector上的channel重新注册到新的Selector上。  
 关闭bug的Selector，使用新的Selector进行替换。  
+
+
+Netty的解决办法：对Selector的select操作周期进行统计，每完成一次空的select操作进行一次计数，若在某个周期内连续发生N次空轮询，则触发了epoll死循环bug。  
+重建Selector，判断是否是其他线程发起的重建请求，若不是则将原SocketChannel从旧的Selector上去除注册，重新注册到新的Selector上，并将原来的Selector关闭。
+
   
 ---------------------------------------------------------------------------------------------------------------------  
+
+
+Netty网络模型
+https://blog.csdn.net/hbtj_1216/article/details/75331995  
+
   
 参考  
 https://blog.csdn.net/j080624/article/details/87209637  
@@ -314,8 +379,10 @@ LengthFieldBasedFrameDecoder  大多数的协议（私有或者公有），协�
   
   
 ---------------------------------------------------------------------------------------------------------------------  
-  
-java nio的selector  和linux的epoll select  
+Netty的Selector模型
+
+
+Java NIO的selector 和Linux的epoll select  
   
 https://www.cnblogs.com/jukan/p/5272257.html  
 http://blog.csdn.net/u010853261/article/details/53464475  
@@ -348,7 +415,10 @@ http://blog.csdn.net/shallwake/article/details/5265287
 参考  
 https://blog.csdn.net/gaowenhui2008/article/details/55044704  
 https://youzhixueyuan.com/netty-implementation-principle.html  
-  
+
+
+### Netty高性能原因
+
   
 Java异步NIO框架Netty实现高性能高并发  
   
@@ -438,7 +508,7 @@ https://www.cnblogs.com/xys1228/p/6088805.html
 https://blog.csdn.net/baiye_xing/article/details/73351252  
 http://www.pianshen.com/article/5394293329/  
   
-Netty零拷贝：  
+### Netty零拷贝：  
   
 OS层面零拷贝  
 netty层面零拷贝  
@@ -478,14 +548,8 @@ https://segmentfault.com/a/1190000007560884
 
 
 ---------------------------------------------------------------------------------------------------------------------  
-https://www.jianshu.com/p/7882689e7fe5  
-https://www.jianshu.com/p/c4bd37a3555b  
-https://blog.csdn.net/pentiumchen/article/details/45372625  
-https://blog.csdn.net/TheLudlows/article/details/86144788  
-http://blog.jobbole.com/106344/  
-http://www.importnew.com/22205.html  
-https://blog.csdn.net/chengzhang1989/article/details/80424556  
-Netty内存管理：堆外内存池  
+
+Netty内存管理（堆外内存池）  
   
   
   
@@ -582,7 +646,13 @@ ByteBuf byteBuf1 = bufAllocator.buffer(100);
    
 参考  
 https://sq.163yun.com/blog/article/213832853624152064  
-  
+https://www.jianshu.com/p/7882689e7fe5  
+https://www.jianshu.com/p/c4bd37a3555b  
+https://blog.csdn.net/pentiumchen/article/details/45372625  
+https://blog.csdn.net/TheLudlows/article/details/86144788  
+http://blog.jobbole.com/106344/  
+http://www.importnew.com/22205.html  
+https://blog.csdn.net/chengzhang1989/article/details/80424556  
   
 ---------------------------------------------------------------------------------------------------------------------  
 使用Handler的注意事项：  
@@ -707,38 +777,70 @@ https://sylvanassun.github.io/2017/11/30/2017-11-30-netty_introduction/
 https://my.oschina.net/7001/blog/994219  
 https://www.infoq.cn/article/netty-threading-model  
   
+  
+---------------------------------------------------------------------------------------------------------------------  
+
+Netty的HTTP协议数据
+
+- HttpRequest（FullHttpRequest）  
+- HttpContent（LastHttpContent、FullHttpMessage）  
+- HttpResponse（FullHttpResponse）  
+
+![netty-http数据继承关系](netty-http数据.png "ReferencePicture")
+
+
+
+
 ---------------------------------------------------------------------------------------------------------------------  
   
   
-参考    
-https://www.cnblogs.com/JAYIT/p/8241634.html    
-http://www.voidcn.com/article/p-rzokhbzl-zh.html    
-https://blog.csdn.net/zhangjunli/article/details/89382006    
-    
-    
-    
-Netty的高性能及NIO的epoll空轮询bug    
-    
-    
-Selector BUG出现的原因    
-若Selector的轮询结果为空，也没有wakeup或新消息处理，则发生空轮询，CPU使用率100%，    
-    
-Netty的解决办法    
-1、对Selector的select操作周期进行统计，每完成一次空的select操作进行一次计数，    
-2、若在某个周期内连续发生N次空轮询，则触发了epoll死循环bug。    
-3、重建Selector，判断是否是其他线程发起的重建请求，若不是则将原SocketChannel从旧的Selector上去除注册，重新注册到新的Selector上，并将原来的Selector关闭。    
-    
-Netty的解决策略：    
-对Selector的select操作周期进行统计。    
-每完成一次空的select操作进行一次计数。    
-在某个周期内如果连续N次空轮询，则说明触发了JDK NIO的epoll死循环bug。    
-创建新的Selector，将出现bug的Selector上的channel重新注册到新的Selector上。    
-关闭bug的Selector，使用新的Selector进行替换。    
+## 参考资料
+
+
+### Netty官网
+
+http://netty.io/  
+https://github.com/netty/netty  
   
   
-  
-Netty的解决办法：对Selector的select操作周期进行统计，每完成一次空的select操作进行一次计数，若在某个周期内连续发生N次空轮询，则触发了epoll死循环bug。  
-重建Selector，判断是否是其他线程发起的重建请求，若不是则将原SocketChannel从旧的Selector上去除注册，重新注册到新的Selector上，并将原来的Selector关闭。  
+
+### Netty学习参考
+
+
+参考文章  
+http://ifeve.com/netty1/  
+[李林锋InfoQ博客](https://www.infoq.cn/profile/46034E8B91DB3A/publish)  
+
+Java异步NIO框架Netty实现高性能高并发  
+https://blog.csdn.net/gaowenhui2008/article/details/55044704  
+https://blog.csdn.net/a724888/article/category/7744972   
+https://github.com/code4craft/netty-learning  
+https://crossoverjie.top/categories/Netty/  
+https://github.com/crossoverJie/netty-learning  
+
+
+示例查看  
+org.quickstart.remoting.netty.v4x.helloworld  
+Rocketmq中的连接:NettyRemotingClient、NettyRemotingServer  
+ 
+
+
+
+
+### SpringBoot和Netty整合
+https://crossoverjie.top/2018/05/24/netty/Netty(1)TCP-Heartbeat/  
+https://github.com/duanwucui/netty-action  
+/Users/yangzl/git/quickstart-spring-boot/quickstart-spring-boot-netty-action  
+/Users/yangzl/git/quickstart-spring-boot2/quickstart-spring-netty-action  
+
+
+
+
+
+
 ---------------------------------------------------------------------------------------------------------------------  
-  
-  
+
+
+
+
+

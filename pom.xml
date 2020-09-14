@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<!--<parent>
-		<groupId>org.quickstart</groupId>
-		<artifactId>quickstart-all</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>..</relativePath> &lt;!&ndash; lookup parent from repository &ndash;&gt;
-	</parent>-->
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <!--<parent>
+    <groupId>org.quickstart</groupId>
+    <artifactId>quickstart-all</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <relativePath>..</relativePath> &lt;!&ndash; lookup parent from repository &ndash;&gt;
+  </parent>-->
 
-	<modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
   <groupId>org.quickstart</groupId>
-	<artifactId>quickstart-remoting</artifactId>
+  <artifactId>quickstart-remoting</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-	<packaging>pom</packaging>
-	<name>${project.artifactId}-${project.version}</name>
-	<url>http://maven.apache.org</url>
-	<description>Demo project for XXX</description>
+  <packaging>pom</packaging>
+  <name>${project.artifactId}-${project.version}</name>
+  <url>http://maven.apache.org</url>
+  <description>Demo project for XXX</description>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-	</properties>
+  </properties>
 
   <dependencies>
 
@@ -43,14 +43,14 @@
 
   </dependencies>
 
-	<modules>
-		<module>quickstart-grizzly</module>
-		<module>quickstart-netty</module>
-		<module>quickstart-mina</module>
-		<module>quickstart-xsocket</module>
-		<module>quickstart-hessian</module>
-		<module>quickstart-t-io</module>
-	</modules>
+  <modules>
+    <module>quickstart-grizzly</module>
+    <module>quickstart-netty</module>
+    <module>quickstart-mina</module>
+    <module>quickstart-xsocket</module>
+    <module>quickstart-hessian</module>
+    <module>quickstart-t-io</module>
+  </modules>
 
   <build>
 
