@@ -32,7 +32,8 @@ public class HelloServer {
             @Override
             public void initChannel(SocketChannel ch) throws Exception {
               // 注册handler
-              ch.pipeline().addLast(new HelloServerInHandler());
+              ch.pipeline().addLast(new FlowControlHandler());
+              //ch.pipeline().addLast(new HelloServerInHandler());
             }
           })//
           .option(ChannelOption.SO_BACKLOG, 128)//
