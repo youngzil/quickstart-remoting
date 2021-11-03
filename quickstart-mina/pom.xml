@@ -19,7 +19,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<mina.version>2.1.4</mina.version>
+		<mina.version>2.1.5</mina.version>
 	</properties>
 
 	<dependencies>
