@@ -392,7 +392,7 @@ NioEventLoopGroup从NioEventLoop数组里挨个取出NioEventLoop来处理Channe
   
 BossEventLoopGroup通常是一个单线程的EventLoop，EventLoop维护着一个注册了ServerSocketChannel的Selector实例，  
 BossEventLoop不断轮询Selector将连接事件分离出来，通常是OP_ACCEPT事件，然后将accept得到的SocketChannel交给WorkEventLoopGroup，  
-WorkerEventLoopGroup会由next选择其中一个EventLoopGroup来将这个SocketChannel注册到其维护的Selector并对其后续的IO事件进行持续的处理。  
+WorkerEventLoopGroup会由next选择其中一个EventLoop来将这个SocketChannel注册到其维护的Selector并对其后续的IO事件进行持续的处理。  
 
 在Reactor模式中BossEventLoopGroup主要是对多线程的扩展，而每个EventLoop的实现涵盖IO事件的分离，和分发(Dispatcher)。  
 
@@ -799,6 +799,11 @@ https://mp.weixin.qq.com/s/PonYrfSAGVIhKjABo6yJbw
   
   
 ### Netty线程模型和JDK线程池TPE模型比较
+
+ThreadPoolExecutor: TPE(JDK)
+MultithreadEventExecutorGroup: MEG(Netty)
+SingleThreadEventExecutor: STE(Netty)
+
 1、netty线程切换几率小，更高效：TPE使用共用的队列排队，在高并发环境下会导致BlockingQueue频繁的锁碰撞，进而导致大量线程切换开销，  
     MEG中由于队列是只有一个线程消费，BlockingQueue锁碰撞机会比TPE小很多，线程切换开销也比TPE小很多  
     
@@ -1084,6 +1089,33 @@ Netty里有四种主力的ByteBuf：
 
 
 
+##### 
+
+代码层面：
+
+Tiny 代表 0 ~ 512B 之间的内存块  
+Samll 代表 512B ~ 8K 之间的内存块  
+Normal 代表 8K ~ 16M 的内存块，  
+Huge 代表大于 16M 的内存块。并未在代码中定义
+
+在 Netty 中定义了一个 SizeClass 类型的枚举，用于描述上图中的内存规格类型，分别为 Tiny、Small 和 Normal。  
+但是图中 Huge 并未在代码中定义，当分配大于 16M 时，可以归类为 Huge 场景，Netty 会直接使用非池化的方式进行内存分配。
+
+
+
+Netty 在每个区域内又定义了更细粒度的内存分配单位，分别为 Chunk、Page、Subpage，我们将逐一对其进行介绍。
+
+Chunk 是 Netty 向操作系统申请内存的单位，所有的内存分配操作也是基于 Chunk 完成的，Chunk 可以理解为 Page 的集合，每个 Chunk 默认大小为 16M。
+
+Page 是 Chunk 用于管理内存的单位，Netty 中的 Page 的大小为 8K，不要与 Linux 中的内存页 Page 相混淆了。假如我们需要分配 64K 的内存，需要在 Chunk 中选取 8 个 Page 进行分配。
+
+Subpage 负责 Page 内的内存分配，假如我们分配的内存大小远小于 Page，直接分配一个 Page 会造成严重的内存浪费，所以需要将 Page 划分为多个相同的子块进行分配，这里的子块就相当于 Subpage。  
+按照 Tiny 和 Small 两种内存规格，SubPage 的大小也会分为两种情况。  
+在 Tiny 场景下，最小的划分单位为 16B，按 16B 依次递增，16B、32B、48B ...... 496B；  
+在 Small 场景下，总共可以划分为 512B、1024B、2048B、4096B 四种情况。  
+Subpage 没有固定的大小，需要根据用户分配的缓冲区大小决定，例如分配 1K 的内存时，Netty 会把一个 Page 等分为 8 个 1K 的 Subpage。
+
+
 
 
 
@@ -1303,6 +1335,14 @@ https://blog.csdn.net/zhangjunli/article/details/89382006
 ---------------------------------------------------------------------------------------------------------------------  
 
 ## Netty内置ChannelHandler
+
+
+//编码器
+new NettyEncoder(),
+//解码器
+new NettyDecoder(),
+//空闲通道检测handler
+new IdleStateHandler
 
 
 ### IdleStateHandler  
